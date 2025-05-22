@@ -213,7 +213,7 @@ const Dashboard = () => {
             <CardContent>
               <div className="space-y-3 text-sm text-gray-600">
                 <p>
-                  <strong>1.</strong> Ative o serviço em Configurações > Acessibilidade
+                  <strong>1.</strong> Ative o serviço em Configurações &gt; Acessibilidade
                 </p>
                 <p>
                   <strong>2.</strong> Configure os gatilhos com # (ex: #PEDIDO123)
@@ -231,3 +231,4 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
+
