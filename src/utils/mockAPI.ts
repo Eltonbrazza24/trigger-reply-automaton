@@ -1,8 +1,31 @@
 
 import { Trigger } from '../types/trigger';
 
-// Simulação de banco de dados local
-let triggerDatabase: Trigger[] = [
+// Carrega dados do localStorage ou usa o padrão se não houver dados salvos
+const loadStoredTriggers = (): Trigger[] => {
+  const storedTriggers = localStorage.getItem('whatsapp-triggers');
+  if (storedTriggers) {
+    try {
+      return JSON.parse(storedTriggers);
+    } catch (e) {
+      console.error('Erro ao carregar gatilhos do localStorage:', e);
+      return getDefaultTriggers();
+    }
+  }
+  return getDefaultTriggers();
+};
+
+// Salva gatilhos no localStorage
+const saveTriggers = (triggers: Trigger[]): void => {
+  try {
+    localStorage.setItem('whatsapp-triggers', JSON.stringify(triggers));
+  } catch (e) {
+    console.error('Erro ao salvar gatilhos no localStorage:', e);
+  }
+};
+
+// Dados padrão
+const getDefaultTriggers = (): Trigger[] => [
   {
     id: '1',
     triggerText: '#PEDIDO123',
@@ -40,6 +63,9 @@ let triggerDatabase: Trigger[] = [
   },
 ];
 
+// Inicializa a base de dados
+let triggerDatabase: Trigger[] = loadStoredTriggers();
+
 // Simula delay de rede
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -63,6 +89,9 @@ export const mockAPI = {
       // Incrementa contador de uso
       foundTrigger.usageCount++;
       foundTrigger.lastUsed = new Date().toISOString();
+      
+      // Salva as alterações
+      saveTriggers(triggerDatabase);
       
       return {
         response: foundTrigger.responseText,
@@ -96,6 +125,10 @@ export const mockAPI = {
     };
 
     triggerDatabase.push(newTrigger);
+    
+    // Salva as alterações
+    saveTriggers(triggerDatabase);
+    
     return newTrigger;
   },
 
@@ -120,6 +153,10 @@ export const mockAPI = {
     }
 
     triggerDatabase[index] = { ...triggerDatabase[index], ...updates };
+    
+    // Salva as alterações
+    saveTriggers(triggerDatabase);
+    
     return triggerDatabase[index];
   },
 
@@ -133,6 +170,9 @@ export const mockAPI = {
     }
 
     triggerDatabase.splice(index, 1);
+    
+    // Salva as alterações
+    saveTriggers(triggerDatabase);
   },
 
   // Estatísticas (para uso futuro)
