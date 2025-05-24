@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import TriggerManager from './TriggerManager';
 import StatsCard from './StatsCard';
-import { mockAPI } from '../utils/mockAPI';
+import { supabaseAPI } from '../utils/supabaseAPI';
 import { Trigger } from '../types/trigger';
 import { useToast } from '@/hooks/use-toast';
 
@@ -22,7 +22,7 @@ const Dashboard = () => {
   const loadTriggers = async () => {
     try {
       setLoading(true);
-      const data = await mockAPI.getTriggers();
+      const data = await supabaseAPI.getTriggers();
       setTriggers(data);
     } catch (error) {
       toast({
@@ -37,17 +37,17 @@ const Dashboard = () => {
 
   const handleAddTrigger = async (triggerData: Omit<Trigger, 'id' | 'createdAt' | 'lastUsed'>) => {
     try {
-      const newTrigger = await mockAPI.createTrigger(triggerData);
+      const newTrigger = await supabaseAPI.createTrigger(triggerData);
       setTriggers(prev => [newTrigger, ...prev]);
       setShowAddForm(false);
       toast({
         title: "Sucesso",
         description: "Gatilho criado com sucesso!",
       });
-    } catch (error) {
+    } catch (error: any) {
       toast({
         title: "Erro",
-        description: "Falha ao criar gatilho",
+        description: error.message || "Falha ao criar gatilho",
         variant: "destructive",
       });
     }
@@ -55,16 +55,16 @@ const Dashboard = () => {
 
   const handleUpdateTrigger = async (id: string, updates: Partial<Trigger>) => {
     try {
-      const updatedTrigger = await mockAPI.updateTrigger(id, updates);
+      const updatedTrigger = await supabaseAPI.updateTrigger(id, updates);
       setTriggers(prev => prev.map(t => t.id === id ? updatedTrigger : t));
       toast({
         title: "Sucesso",
         description: "Gatilho atualizado com sucesso!",
       });
-    } catch (error) {
+    } catch (error: any) {
       toast({
         title: "Erro",
-        description: "Falha ao atualizar gatilho",
+        description: error.message || "Falha ao atualizar gatilho",
         variant: "destructive",
       });
     }
@@ -72,16 +72,16 @@ const Dashboard = () => {
 
   const handleDeleteTrigger = async (id: string) => {
     try {
-      await mockAPI.deleteTrigger(id);
+      await supabaseAPI.deleteTrigger(id);
       setTriggers(prev => prev.filter(t => t.id !== id));
       toast({
         title: "Sucesso",
         description: "Gatilho removido com sucesso!",
       });
-    } catch (error) {
+    } catch (error: any) {
       toast({
         title: "Erro",
-        description: "Falha ao remover gatilho",
+        description: error.message || "Falha ao remover gatilho",
         variant: "destructive",
       });
     }
@@ -182,24 +182,24 @@ const Dashboard = () => {
             <CardContent>
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-600">Serviço Android</span>
-                  <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                    <span className="text-sm font-medium text-green-600">Ativo</span>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-600">WhatsApp Business</span>
+                  <span className="text-sm text-gray-600">Banco de Dados</span>
                   <div className="flex items-center gap-2">
                     <div className="w-2 h-2 bg-green-500 rounded-full"></div>
                     <span className="text-sm font-medium text-green-600">Conectado</span>
                   </div>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-600">API Dashboard</span>
+                  <span className="text-sm text-gray-600">API Supabase</span>
                   <div className="flex items-center gap-2">
                     <div className="w-2 h-2 bg-green-500 rounded-full"></div>
                     <span className="text-sm font-medium text-green-600">Online</span>
+                  </div>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-gray-600">Serviço Android</span>
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
+                    <span className="text-sm font-medium text-yellow-600">Aguardando</span>
                   </div>
                 </div>
               </div>
@@ -213,13 +213,16 @@ const Dashboard = () => {
             <CardContent>
               <div className="space-y-3 text-sm text-gray-600">
                 <p>
-                  <strong>1.</strong> Ative o serviço em Configurações &gt; Acessibilidade
+                  <strong>1.</strong> Configure os gatilhos no dashboard
                 </p>
                 <p>
-                  <strong>2.</strong> Configure os gatilhos com # (ex: #PEDIDO123)
+                  <strong>2.</strong> Instale o app Android e configure o endpoint da API
                 </p>
                 <p>
-                  <strong>3.</strong> O app irá responder automaticamente quando detectar os gatilhos
+                  <strong>3.</strong> Ative o serviço em Configurações &gt; Acessibilidade
+                </p>
+                <p>
+                  <strong>4.</strong> O app responderá automaticamente aos gatilhos detectados
                 </p>
               </div>
             </CardContent>
@@ -231,4 +234,3 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
-
