@@ -9,103 +9,13 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      iptu2025: {
-        Row: {
-          area_construida: string | null
-          area_do_terreno: string | null
-          compromissario: string | null
-          endereco: string | null
-          id: number
-          inscricao_cadastral: string
-          proprietario: string | null
-          registro: number
-          valor_venal_total: string | null
-        }
-        Insert: {
-          area_construida?: string | null
-          area_do_terreno?: string | null
-          compromissario?: string | null
-          endereco?: string | null
-          id?: number
-          inscricao_cadastral: string
-          proprietario?: string | null
-          registro: number
-          valor_venal_total?: string | null
-        }
-        Update: {
-          area_construida?: string | null
-          area_do_terreno?: string | null
-          compromissario?: string | null
-          endereco?: string | null
-          id?: number
-          inscricao_cadastral?: string
-          proprietario?: string | null
-          registro?: number
-          valor_venal_total?: string | null
-        }
-        Relationships: []
-      }
-      registros: {
-        Row: {
-          Cadastro: string | null
-          Endereco: string | null
-          id: number
-          Proprietario: string | null
-          Registro: string | null
-        }
-        Insert: {
-          Cadastro?: string | null
-          Endereco?: string | null
-          id?: number
-          Proprietario?: string | null
-          Registro?: string | null
-        }
-        Update: {
-          Cadastro?: string | null
-          Endereco?: string | null
-          id?: number
-          Proprietario?: string | null
-          Registro?: string | null
-        }
-        Relationships: []
-      }
+      [_ in never]: never
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      gtrgm_compress: {
-        Args: { "": unknown }
-        Returns: unknown
-      }
-      gtrgm_decompress: {
-        Args: { "": unknown }
-        Returns: unknown
-      }
-      gtrgm_in: {
-        Args: { "": unknown }
-        Returns: unknown
-      }
-      gtrgm_options: {
-        Args: { "": unknown }
-        Returns: undefined
-      }
-      gtrgm_out: {
-        Args: { "": unknown }
-        Returns: unknown
-      }
-      set_limit: {
-        Args: { "": number }
-        Returns: number
-      }
-      show_limit: {
-        Args: Record<PropertyKey, never>
-        Returns: number
-      }
-      show_trgm: {
-        Args: { "": string }
-        Returns: string[]
-      }
+      [_ in never]: never
     }
     Enums: {
       [_ in never]: never
