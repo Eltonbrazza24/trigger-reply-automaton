@@ -15,7 +15,16 @@ export const supabaseAPI = {
       throw new Error('Falha ao carregar gatilhos');
     }
 
-    return data || [];
+    // Mapear os dados do banco para o formato esperado
+    return (data || []).map(item => ({
+      id: item.id,
+      triggerText: item.trigger_text,
+      responseText: item.response_text,
+      isActive: item.is_active,
+      usageCount: item.usage_count,
+      createdAt: item.created_at,
+      lastUsed: item.last_used,
+    }));
   },
 
   // Buscar resposta por gatilho (usado pelo app Android)
